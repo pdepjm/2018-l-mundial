@@ -1,3 +1,7 @@
+% Todo: escribir enunciado en un drive?
+
+% TODO: completar esto
+
 pais(argentina,d).
 pais(croacia,d).
 pais(islandia,d).
@@ -8,6 +12,7 @@ campeon(alemania, 2014).
 
 anioActual(2018).
 
+% TODO:
 resultado(argentina,islandia,1,1).
 resultado(mexico,alemania,1,0).
 
@@ -43,9 +48,6 @@ hizoAlgunaVez(Pais,CantGoles):-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% poneeeeele que estaría bueno uno con O más fácil, que no repita código.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % si el local ó el visitante fueron campeones.
 partidoComplicado(Local,Visitante):-
@@ -66,7 +68,6 @@ partidoComplicado(Local,Visitante):-
 % ojo con la charla de repetición
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 lindoParaMirar(Pais1,Pais2)
@@ -83,6 +84,18 @@ ultimaCopa(Pais,Anio):-
 ultimaCopa(Pais,Anio):-
     campeon(Pais,Anio),
     not((campeon(Pais,Anio2), Anio2 > Anio)).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TODO:
+% faltan más excusas para practicar forall
+% mundial de estrellas si participan todos los campeones pasados.
+% otro con not?
+
+
+
+% siamo fuori si alguna vez fue campion y ahora no participa XD
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Si hace bocha que no gana (cuando ganó al menos una vez, y pasaron 20 años desde la última vez que ganó )
@@ -129,6 +142,7 @@ jugador(argentina,messi,delantero(150)).
 jugador(argentina,meza,delantero(50)).
 jugador(argentina,masche,defensor(4)).
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Saber si es buen defensor
 
 buenDefensor(Jugador):-
@@ -136,7 +150,8 @@ buenDefensor(Jugador):-
 buenDefensor(Jugador):-
     jugador(_,Jugador,arquero(GA,GC)),
     GA > GC.
-    
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
 metePenal(Pateador,Arquero):-
     jugador(_,Pateador, Posicion),
     golesConvertidos(Posicion,CantConvertidos),
