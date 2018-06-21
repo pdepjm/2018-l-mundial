@@ -27,7 +27,7 @@ pais(inglaterra,g).
 pais(tunez,g).
 pais(panama,g).
 pais(japon,h).
-pais(senagal,h).
+pais(senegal,h).
 pais(colombia,h).
 pais(polonia,h).
 
@@ -70,31 +70,31 @@ resultado(iran,espania,0,1).
 % Si en el grupo hay dos ó mas campeones.
 
 grupoDeLaMuerte(Grupo):-
-    pais(Campeon1,Grupo),
-    pais(Campeon2,Grupo),
-    campeon(Campeon1,_),
-    campeon(Campeon2,_),
+    pais(Pais1,Grupo),
+    pais(Pais2,Grupo),
+    campeon(Pais1,_),
+    campeon(Pais2,_),
     Campeon1 \= Campeon2.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 2
 % si alguna vez metió 3 o mas goles.
-
+/*
 esUnaFiesta(Pais):-
     resultado(Pais,_,CantGoles,_),
     CantGoles >= 3.
 esUnaFiesta(Pais):-
     resultado(_,Pais,_,CantGoles),
     CantGoles >= 3.
-
+*/
 % Mejora (evitar la repetición):
 
 esUnaFiesta(Pais):-
-    hizoAlgunaVez(Pais,CantGoles),
+    paisGoles(Pais,CantGoles),
     CantGoles >= 3.
 
-hizoAlgunaVez(Pais,CantGoles):-
+paisGoles(Pais,CantGoles):-
     resultado(_,Pais,_,CantGoles).
-hizoAlgunaVez(Pais,CantGoles):-
+paisGoles(Pais,CantGoles):-
     resultado(Pais,_,CantGoles,_).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 3
@@ -117,7 +117,15 @@ partidoComplicado(Local,Visitante):-
 
 % ojo con la charla de repetición (yo lo dejaría pasar en este punto)
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+% ya jugó si tiene una ccantidad de goles (aunque sea 0)
+yaJugo(Pais):- paisGoles(Pais,_).
+
+% participa si está en algún grupo
+participa(Pais) :- pais(Pais,_).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 4 y 10
 
 % mundialEnUnaPalabra/1: la descripción más acertada del mundial
 
@@ -137,9 +145,7 @@ mundialEnUnaPalabra(legendario) :-
 mundialEnUnaPalabra(legendario) :-
     forall(jugador(_,P,delantero(CantidadGoles)),(CantidadGoles > 10, campeon(P,_))).
     
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Intro a forall
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 5
 
 % relacionar a un pais con la ultima vez que fue campeon
 
@@ -152,11 +158,7 @@ ultimaCopa(Pais,Anio):-
     campeon(Pais,Anio),
     not((campeon(Pais,Anio2), Anio2 > Anio)).
 
-% siamo fuori si alguna vez fue campion y ahora no participa XD
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 6
 % Si hace bocha que no gana (cuando ganó al menos una vez, y pasaron 20 años desde la última vez que ganó )
 haceBocha(Pais):-
     ultimaCopa(Pais,Anio),
@@ -164,7 +166,7 @@ haceBocha(Pais):-
     Tristeza is AnioActual - Anio,
     Tristeza >= 20.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 7
 % Proomete si siempre que jugaron metieron goles, o si ambos están en el grupo de la muerte.
 
 promete(Pais1,Pais2):-
@@ -178,7 +180,7 @@ promete(Pais1,Pais2):-
 
 siempreQueJugoMetio(Pais):-
     pais(Pais,_),
-    forall(hizoAlgunaVez(Pais,Cant), Cant \= 0).
+    forall(paisGoles(Pais,Cant), Cant \= 0).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -190,7 +192,7 @@ siempreQueJugoMetio(Pais):-
 % Queremos llevar estadísticas históricas de la vida de nuestros jugadores para poder tomar mejores decisiones. 
 % De los jugadores nos interesa en qué país juegan, su nombre, y su posición.
 % Las posiciones que a nosotros nos interesan son los arqueros, los defensores y delanteros.
-% De los arqueros se conocen los 
+% Definimos las estadísticas de cada POSICION con FUNCTORES:
 
 % arquero(goles que metio, atajadas, goles que le metieron)
 % delantero(goles que metio).
@@ -201,7 +203,7 @@ jugador(argentina,messi,delantero(1028)).
 jugador(argentina,kun,delantero(426)).
 jugador(argentina,masche,defensor(1024,19)).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%% 8
 % Saber si es buen defensor
 
 buenDefensor(Jugador):-
@@ -210,7 +212,7 @@ buenDefensor(Jugador):-
     jugador(_,Jugador,arquero(_,Atajadas,GolesRecibidos)),
     Atajadas > GolesRecibidos.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 9   
 metePenal(Pateador,Arquero):-
     jugador(_,Pateador, Posicion),
     golesConvertidos(Posicion,CantConvertidos),
@@ -221,13 +223,14 @@ golesConvertidos(arquero(Cant,_,_),Cant).
 golesConvertidos(delantero(Cant),Cant).
 golesConvertidos(defensor(_,Cant),Cant).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%% 11
 
 % mejorDelGrupo/2 Relaciona un grupo con el mejor jugador de todos los que juegan en los países del grupo.
 % Para que un jugador sea mejor que otro, todos los stats sumados de uno deben ser mayores al del otro (ojo que los goles que le metieron restan).
 % Debe ser inversible por el segundo argumento.
 
-mejorDelGrupo(Grupo,Jugador).
+% mejorDelGrupo(Grupo,Jugador):- (para pensar)
 
 % Obtener el mejor jugador del mundial.
-mejorJugador(Jugador):- mejorDelGrupo(_,Jugador).
+% lo siguiente funciona siempre que mejorDelGrupo no ligue el grupo:
+% mejorJugador(Jugador):- mejorDelGrupo(_,Jugador).
