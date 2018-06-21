@@ -14,18 +14,6 @@ pais(argentina,d).
 pais(croacia,d).
 pais(islandia,d).
 pais(nigeria,d).
-pais(argentina,d).
-pais(croacia,d).
-pais(islandia,d).
-pais(nigeria,d).
-pais(argentina,d).
-pais(croacia,d).
-pais(islandia,d).
-pais(nigeria,d).
-pais(argentina,d).
-pais(croacia,d).
-pais(islandia,d).
-pais(nigeria,d).
 pais(serbia,e).
 pais(brasil,e).
 pais(suiza,e).
@@ -78,7 +66,7 @@ resultado(uruguay,arabiaSaudita,1,0).
 resultado(iran,espania,0,1).
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 1
 % Si en el grupo hay dos ó mas campeones.
 
 grupoDeLaMuerte(Grupo):-
@@ -88,7 +76,7 @@ grupoDeLaMuerte(Grupo):-
     campeon(Campeon2,_),
     Campeon1 \= Campeon2.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 2
 % si alguna vez metió 3 o mas goles.
 
 esUnaFiesta(Pais):-
@@ -109,13 +97,12 @@ hizoAlgunaVez(Pais,CantGoles):-
 hizoAlgunaVez(Pais,CantGoles):-
     resultado(Pais,_,CantGoles,_).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 3
 
 % si el local ó el visitante fueron campeones.
-partidoComplicado(Local,Visitante):-
+partidoComplicado(Local,_):-
     campeon(Local,_).
-partidoComplicado(Local,Visitante):-
+partidoComplicado(_,Visitante):-
     campeon(Visitante,_).
 
 % problemas de inversibilidad, generación.
@@ -200,19 +187,19 @@ siempreQueJugoMetio(Pais):-
 % Agregamos los jugadores
 
 % Modelado:
-% Queremos llevar estadísticas de nuestros jugadores para poder tomar mejores decisiones. 
+% Queremos llevar estadísticas históricas de la vida de nuestros jugadores para poder tomar mejores decisiones. 
 % De los jugadores nos interesa en qué país juegan, su nombre, y su posición.
 % Las posiciones que a nosotros nos interesan son los arqueros, los defensores y delanteros.
 % De los arqueros se conocen los 
 
-% arquero(goles que metio, goles que atajo, goles que le metieron)
+% arquero(goles que metio, atajadas, goles que le metieron)
 % delantero(goles que metio).
 % defensor(robos de pelota, goles que metio).
 
-jugador(argentina,caballero,arquero(5,30,60)).
-jugador(argentina,messi,delantero(150)).
-jugador(argentina,meza,delantero(50)).
-jugador(argentina,masche,defensor(4)).
+jugador(argentina,caballero,arquero(0,1398,476)).
+jugador(argentina,messi,delantero(1028)).
+jugador(argentina,kun,delantero(426)).
+jugador(argentina,masche,defensor(1024,19)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Saber si es buen defensor
@@ -220,8 +207,8 @@ jugador(argentina,masche,defensor(4)).
 buenDefensor(Jugador):-
     jugador(_,Jugador,defensor(_,_)).
 buenDefensor(Jugador):-
-    jugador(_,Jugador,arquero(GA,GC)),
-    GA > GC.
+    jugador(_,Jugador,arquero(_,Atajadas,GolesRecibidos)),
+    Atajadas > GolesRecibidos.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
 metePenal(Pateador,Arquero):-
