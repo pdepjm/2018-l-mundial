@@ -1,7 +1,3 @@
-% Todo: escribir enunciado en un drive?
-
-% TODO: completar esto
-
 pais(rusia,a).
 pais(uruguay,a).
 pais(egipto,a).
@@ -59,9 +55,28 @@ campeon(alemania, 2014).
 
 anioActual(2018).
 
-% TODO:
+resultado(rusia,arabiaSaudita,5,0).
+resultado(egipto,uruguay,0,1).
+resultado(marruecos,iran,0,1).
+resultado(portugal,espania,3,3).
+resultado(francia,australia,2,1).
 resultado(argentina,islandia,1,1).
-resultado(mexico,alemania,1,0).
+resultado(peru,dinamarca,0,1).
+resultado(croacia,nigeria,2,0).
+resultado(costaRica,serbia,0,1).
+resultado(alemania,mexico,0,1).
+resultado(brasil,suiza,1,1).
+resultado(suecia,coreaDelSur,1,0).
+resultado(belgica,panama,3,0).
+resultado(tunez,inglaterra,1,2).
+resultado(colombia,japon,1,2).
+resultado(polonia,senegal,1,2).
+
+resultado(rusia,egipto,3,1).
+resultado(portugal,marruecos,1,0).
+resultado(uruguay,arabiaSaudita,1,0).
+resultado(iran,espania,0,1).
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Si en el grupo hay dos ó mas campeones.
@@ -70,7 +85,8 @@ grupoDeLaMuerte(Grupo):-
     pais(Campeon1,Grupo),
     pais(Campeon2,Grupo),
     campeon(Campeon1,_),
-    campeon(Campeon2,_).
+    campeon(Campeon2,_),
+    Campeon1 \= Campeon2.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % si alguna vez metió 3 o mas goles.
@@ -112,7 +128,7 @@ partidoComplicado(Local,Visitante):-
     pais(Local,_),
     campeon(Visitante,_).
 
-% ojo con la charla de repetición
+% ojo con la charla de repetición (yo lo dejaría pasar en este punto)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -124,7 +140,7 @@ mundialEnUnaPalabra(estrellas) :-
 
 % - increible si solo participan campeones
 mundialEnUnaPalabra(increible) :-
-    forall(pais(P,_),campeon(P,_).
+    forall(pais(P,_),campeon(P,_)).
 
 % - legendario si todos los delanteros que metieron mas de 10 goles juegan para un campeon
 mundialEnUnaPalabra(legendario) :-
@@ -223,6 +239,8 @@ golesConvertidos(defensor(_,Cant),Cant).
 % mejorDelGrupo/2 Relaciona un grupo con el mejor jugador de todos los que juegan en los países del grupo.
 % Para que un jugador sea mejor que otro, todos los stats sumados de uno deben ser mayores al del otro (ojo que los goles que le metieron restan).
 % Debe ser inversible por el segundo argumento.
+
+mejorDelGrupo(Grupo,Jugador).
 
 % Obtener el mejor jugador del mundial.
 mejorJugador(Jugador):- mejorDelGrupo(_,Jugador).
