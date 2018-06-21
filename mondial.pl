@@ -2,12 +2,59 @@
 
 % TODO: completar esto
 
+pais(rusia,a).
+pais(uruguay,a).
+pais(egipto,a).
+pais(arabiaSaudita,a).
+pais(espania,b).
+pais(portugal,b).
+pais(iran,b).
+pais(marruecos,b).
+pais(francia,c).
+pais(dinamarca,c).
+pais(australia,c).
+pais(peru,c).
 pais(argentina,d).
 pais(croacia,d).
 pais(islandia,d).
 pais(nigeria,d).
+pais(argentina,d).
+pais(croacia,d).
+pais(islandia,d).
+pais(nigeria,d).
+pais(argentina,d).
+pais(croacia,d).
+pais(islandia,d).
+pais(nigeria,d).
+pais(argentina,d).
+pais(croacia,d).
+pais(islandia,d).
+pais(nigeria,d).
+pais(serbia,e).
+pais(brasil,e).
+pais(suiza,e).
+pais(costaRica,e).
+pais(suecia,f).
+pais(mexico,f).
+pais(alemania,f).
+pais(coreaDelSur,f).
+pais(belgica,g).
+pais(inglaterra,g).
+pais(tunez,g).
+pais(panama,g).
+pais(japon,h).
+pais(senagal,h).
+pais(colombia,h).
+pais(polonia,h).
 
+campeon(italia, 1982).
 campeon(argentina, 1986).
+campeon(alemania, 1990).
+campeon(brasil, 1994).
+campeon(francia, 1998).
+campeon(brasil, 2002).
+campeon(italia, 2006).
+campeon(espania, 2010).
 campeon(alemania, 2014).
 
 anioActual(2018).
@@ -35,7 +82,7 @@ esUnaFiesta(Pais):-
     resultado(_,Pais,_,CantGoles),
     CantGoles >= 3.
 
-% Mejora:
+% Mejora (evitar la repetición):
 
 esUnaFiesta(Pais):-
     hizoAlgunaVez(Pais,CantGoles),
@@ -67,14 +114,31 @@ partidoComplicado(Local,Visitante):-
 
 % ojo con la charla de repetición
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-lindoParaMirar(Pais1,Pais2)
+% mundialEnUnaPalabra/1: la descripción más acertada del mundial
 
+% - estrellas si participan todos los campeones
+mundialEnUnaPalabra(estrellas) :-
+    forall(campeon(P,_),pais(P,_)).
+
+% - increible si solo participan campeones
+mundialEnUnaPalabra(increible) :-
+    forall(pais(P,_),campeon(P,_).
+
+% - legendario si todos los delanteros que metieron mas de 10 goles juegan para un campeon
+mundialEnUnaPalabra(legendario) :-
+    forall((jugador(_,P,delantero(CantidadGoles)),CantidadGoles > 10), campeon(P,_)).
+
+% - juegoBonito si todos los delanteros metieron mas de 10 goles y juegan para un campeon
+mundialEnUnaPalabra(legendario) :-
+    forall(jugador(_,P,delantero(CantidadGoles)),(CantidadGoles > 10, campeon(P,_))).
+    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Intro a forall
+
+% relacionar a un pais con la ultima vez que fue campeon
 
 ultimaCopa(Pais,Anio):-
     campeon(Pais,Anio),
@@ -84,14 +148,6 @@ ultimaCopa(Pais,Anio):-
 ultimaCopa(Pais,Anio):-
     campeon(Pais,Anio),
     not((campeon(Pais,Anio2), Anio2 > Anio)).
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TODO:
-% faltan más excusas para practicar forall
-% mundial de estrellas si participan todos los campeones pasados.
-% otro con not?
-
-
 
 % siamo fuori si alguna vez fue campion y ahora no participa XD
 
